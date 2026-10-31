@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   GraduationCap,
@@ -17,6 +16,7 @@ import IntroScreen from "./components/IntroScreen";
 import AdminPage from "./components/AdminPage";
 import PhotoImage from "./components/PhotoImage";
 import { MEMORY_PHOTOS, PROFILE_PHOTO } from "./config/images";
+import { publicApi } from "./lib/api";
 import "./App.css";
 
 // ===================================
@@ -443,7 +443,7 @@ function RSVPForm() {
     setSubmitting(true);
     setMessage("");
     try {
-      const { data: result } = await axios.post("/api/rsvp", {
+      const { data: result } = await publicApi.post("/rsvp", {
         name: name.trim(),
         status,
         message: wish.trim(),

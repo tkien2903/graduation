@@ -29,6 +29,10 @@ Trang quản trị đăng nhập tại `http://localhost:5173/admin`. Tài kho�
 
 `pending` là trạng thái khách được admin thêm trước khi xác nhận. Database lưu thời điểm tạo/cập nhật tự động; xuất Excel có thời điểm xác nhận theo giờ Việt Nam. Dữ liệu RSVP không được mở qua API công khai.
 
-## Triển khai
+## Triển khai công khai
 
-Frontend dùng đường dẫn tương đối `/api`; khi deploy cần proxy `/api` tới backend hoặc cấu hình reverse proxy cùng domain. Trên backend đặt `MONGODB_URI`, `JWT_SECRET`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `CLIENT_ORIGIN` và `PORT`. Không đưa `.env` lên GitHub. Deploy Vercel/Render và tải ảnh lên dịch vụ lưu trữ sẽ cấu hình ở giai đoạn tiếp theo.
+Repo có `render.yaml` cho API và `frontend/vercel.json` cho trang React. Trên Vercel chọn repo `tkien2903/graduation`, đặt Root Directory là `frontend`, Framework Preset là Vite, rồi deploy. Trên Render tạo Blueprint từ repo này; Blueprint dùng thư mục `backend`, `npm ci`, `npm start`, và health check `/api/health`.
+
+MongoDB Atlas cần được tạo riêng cho môi trường production. Khi Render hỏi biến môi trường, cung cấp `MONGODB_URI` của Atlas, `JWT_SECRET` mới (ít nhất 32 ký tự), `ADMIN_USERNAME`, `ADMIN_PASSWORD` mới (ít nhất 12 ký tự), và `CLIENT_ORIGIN` là domain Vercel production. Không dùng URI `localhost` hoặc các bí mật trong `.env` local. Vercel cần `VITE_API_URL=https://<tên-service>.onrender.com/api`; sau khi thêm biến này cần redeploy frontend. Không đưa `.env` lên GitHub.
+
+Khi dùng repo riêng tư, kết nối tài khoản GitHub trên cả Vercel và Render để bật tự động deploy theo nhánh `main`. Với repo public, Render cũng hỗ trợ kết nối bằng URL repo. Render free service có thể ngủ khi không có truy cập, nên lượt mở đầu tiên sau thời gian chờ có thể mất thêm thời gian.

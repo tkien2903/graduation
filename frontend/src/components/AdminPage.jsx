@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { ArrowLeft, Download, LogOut, Search, Users, UserCheck, UserX, Clock3, Heart, Pencil, Trash2, Plus, X, Check } from "lucide-react";
+import { adminApi, publicApi } from "../lib/api";
 import "./AdminPage.css";
 
-const api = axios.create({ baseURL: "/api/admin" });
 const statusLabels = { attending: "Sẽ tham dự", declined: "Không tham dự", pending: "Chưa xác nhận" };
 
 function formatDate(value) {
@@ -30,7 +29,7 @@ export default function AdminPage() {
   const [editingName, setEditingName] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const request = (config) => api({ ...config, headers: { ...config.headers, Authorization: `Bearer ${token}` } });
+  const request = (config) => adminApi({ ...config, headers: { ...config.headers, Authorization: `Bearer ${token}` } });
 
   useEffect(() => {
     if (!token) return undefined;
@@ -59,7 +58,7 @@ export default function AdminPage() {
     event.preventDefault();
     setError("");
     try {
-      const { data } = await axios.post("/api/admin/login", { username, password });
+      const { data } = await publicApi.post("/admin/login", { username, password });
       localStorage.setItem("graduation_admin_token", data.token);
       localStorage.setItem("graduation_admin_name", data.username);
       setUsername(data.username);
