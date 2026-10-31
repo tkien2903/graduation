@@ -3,6 +3,7 @@ services:
     name: graduation-invite-api
     runtime: node
     rootDir: backend
+    region: singapore
     plan: free
     buildCommand: npm ci
     startCommand: npm start
