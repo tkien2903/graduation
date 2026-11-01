@@ -17,6 +17,7 @@ if (process.env.ADMIN_PASSWORD.length < 12) throw new Error('ADMIN_PASSWORD cầ
 const app = express()
 const port = Number(process.env.PORT || 3001)
 app.disable('x-powered-by')
+app.set('trust proxy', 1)
 app.use(helmet())
 app.use(cors({ origin: process.env.CLIENT_ORIGIN?.split(',').map((value) => value.trim()).filter(Boolean) || false }))
 app.use(express.json({ limit: '10kb' }))
